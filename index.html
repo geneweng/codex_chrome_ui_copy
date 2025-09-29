@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ViewPoint Explorer | Sunrise Ridge Lookout</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top-bar">
+    <div class="top-left">
+      <button class="icon-button hamburger" aria-label="Open navigation"><span></span></button>
+      <a class="logo" href="#">ViewPoint Explorer</a>
+    </div>
+    <form class="search-bar" role="search">
+      <input type="search" name="q" placeholder="Search locations, authors, or tags" aria-label="Search view points">
+      <button type="submit" class="icon-button search" aria-label="Search">
+        <span class="icon-search"></span>
+      </button>
+      <button type="button" class="icon-button voice" aria-label="Search with your voice">
+        <span class="icon-mic"></span>
+      </button>
+    </form>
+    <div class="top-actions">
+      <button class="icon-button" aria-label="Create new viewpoint">+</button>
+      <button class="icon-button" aria-label="Notifications">Bell</button>
+      <button class="sign-in">Sign in</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="primary">
+      <article class="media-viewer">
+        <header class="media-toolbar">
+          <div class="breadcrumbs">
+            <span class="crumb">Cascade Range</span>
+            <span class="crumb">/</span>
+            <span class="crumb accent">Sunrise Corridor</span>
+          </div>
+          <div class="toolbar-actions">
+            <button class="chip">Export</button>
+            <button class="chip">Plan visit</button>
+            <button class="chip">Report issue</button>
+          </div>
+        </header>
+        <div class="media-container">
+          <div class="media-photo" role="img" aria-label="Golden sunrise casting light across alpine ridge"></div>
+          <div class="media-overlay">
+            <span class="media-type" id="media-type">Photo</span>
+            <span class="media-timestamp" id="media-timestamp">Captured Feb 12, 2025 · 5:54 AM</span>
+          </div>
+          <div class="coordinate-chip" id="coordinate-chip">45.3265° N · 121.7112° W</div>
+        </div>
+      </article>
+
+      <section class="viewpoint-details">
+        <header class="viewpoint-header">
+          <div class="title-block">
+            <h1 id="viewpoint-title">Sunrise Ridge Lookout</h1>
+            <div class="tag-list" aria-label="View point tags" id="tag-list">
+              <span class="chip tag">#sunrise</span>
+              <span class="chip tag">#mountain</span>
+              <span class="chip tag">#winter</span>
+              <span class="chip tag">#photography</span>
+            </div>
+          </div>
+          <div class="meta-right">
+            <div class="stat">
+              <span class="stat-label">Submitted by</span>
+              <span class="stat-value" id="submitted-by">Alex Rivers</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Added</span>
+              <span class="stat-value" id="added-date">Feb 14, 2025</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Last verified</span>
+              <span class="stat-value" id="verified-date">Mar 02, 2025</span>
+            </div>
+          </div>
+        </header>
+
+        <div class="info-grid">
+          <article class="info-card">
+            <h2>Location</h2>
+            <p>Trail access from Timberline Ridge lot. Hike 1.6 miles with moderate incline.</p>
+            <dl>
+              <div>
+                <dt>Latitude</dt>
+                <dd id="detail-latitude">45.3265° N</dd>
+              </div>
+              <div>
+                <dt>Longitude</dt>
+                <dd id="detail-longitude">121.7112° W</dd>
+              </div>
+              <div>
+                <dt>Elevation</dt>
+                <dd id="detail-elevation">2,685 m</dd>
+              </div>
+            </dl>
+          </article>
+
+          <article class="info-card">
+            <h2>Best viewing</h2>
+            <ul>
+              <li>Dawn through early morning for direct sun alignment.</li>
+              <li>Bring traction cleats: ridge collects ice before sunrise.</li>
+              <li>Wind shelter available 200 m east at tree line.</li>
+            </ul>
+          </article>
+
+          <article class="info-card">
+            <h2>Logistics</h2>
+            <dl>
+              <div>
+                <dt>Parking</dt>
+                <dd>20 spaces · Overnight permit required</dd>
+              </div>
+              <div>
+                <dt>Trail status</dt>
+                <dd>Open · Packed snow</dd>
+              </div>
+              <div>
+                <dt>Cell coverage</dt>
+                <dd>Spotty · Offline maps recommended</dd>
+              </div>
+            </dl>
+          </article>
+        </div>
+
+        <article class="description">
+          <h2>About this view</h2>
+          <p id="viewpoint-description">Sunrise Ridge Lookout delivers a sweeping perspective of the Cascade volcanic arc. The vantage point lines up perfectly with morning light as it breaks over the eastern ridge, creating dramatic shadows across the glacial valley. Nearby alpine pines frame the scene and provide shelter from prevailing winds.</p>
+          <p>Alex captured both still imagery and a short drone pass to document the ridge crest. Seasonal access varies; check the latest ranger advisories before heading out.</p>
+        </article>
+      </section>
+
+      <section class="activity">
+        <header class="activity-header">
+          <h2>Comments</h2>
+          <button class="chip" id="add-comment">Add comment</button>
+        </header>
+        <div id="comments-list" class="comments-list" aria-live="polite"></div>
+      </section>
+    </section>
+
+    <aside class="sidebar">
+      <section class="sidebar-card">
+        <header class="sidebar-header">
+          <h2>Filters</h2>
+          <button class="chip">Nearby</button>
+          <button class="chip">Shared tags</button>
+          <button class="chip">Latest</button>
+        </header>
+      </section>
+
+      <section class="sidebar-card">
+        <header class="sidebar-header">
+          <h2>Nearby view points</h2>
+          <span class="subtext">Within 5 km radius</span>
+        </header>
+        <ul class="recommendations" id="nearby-list"></ul>
+      </section>
+
+      <section class="sidebar-card">
+        <header class="sidebar-header">
+          <h2>Shared tags</h2>
+          <span class="subtext">#sunrise · #winter</span>
+        </header>
+        <ul class="recommendations compact" id="shared-tags-list"></ul>
+      </section>
+    </aside>
+  </main>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
