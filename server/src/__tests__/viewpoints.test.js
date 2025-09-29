@@ -19,7 +19,17 @@ if (!runApiTests) {
     server = http.createServer(app);
     try {
       await new Promise((resolve, reject) => {
-        server.listen(0, (err) => (err ? reject(err) : resolve()));
+        const onError = (err) => {
+          server?.off('listening', onListening);
+          reject(err);
+        };
+        const onListening = () => {
+          server.off('error', onError);
+          resolve();
+        };
+        server.once('error', onError);
+        server.once('listening', onListening);
+        server.listen(0);
       });
       const { port } = server.address();
       baseUrl = `http://127.0.0.1:${port}`;

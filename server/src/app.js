@@ -30,9 +30,20 @@ const buildViewpointListQuery = (filters, params, options = {}) => {
 
   return `
     WITH base AS (
-      SELECT v.*, a.display_name AS author_name, a.id AS author_id,
-             ST_Y(v.geom) AS latitude,
-             ST_X(v.geom) AS longitude
+      SELECT
+        v.id,
+        v.title,
+        v.description,
+        v.geom,
+        v.captured_at,
+        v.added_at,
+        v.verified_at,
+        v.elevation_m,
+        v.status,
+        a.display_name AS author_name,
+        a.id AS author_id,
+        ST_Y(v.geom) AS latitude,
+        ST_X(v.geom) AS longitude
       FROM viewpoints v
       JOIN authors a ON a.id = v.author_id
       ${whereClause}
@@ -148,9 +159,20 @@ app.get('/api/viewpoints/:id', async (req, res) => {
 
     const sql = `
       WITH base AS (
-        SELECT v.*, a.display_name AS author_name, a.id AS author_id,
-               ST_Y(v.geom) AS latitude,
-               ST_X(v.geom) AS longitude
+        SELECT
+          v.id,
+          v.title,
+          v.description,
+          v.geom,
+          v.captured_at,
+          v.added_at,
+          v.verified_at,
+          v.elevation_m,
+          v.status,
+          a.display_name AS author_name,
+          a.id AS author_id,
+          ST_Y(v.geom) AS latitude,
+          ST_X(v.geom) AS longitude
         FROM viewpoints v
         JOIN authors a ON a.id = v.author_id
         WHERE v.id = $1
