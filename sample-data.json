@@ -1,0 +1,79 @@
+{
+  "detail": {
+    "id": "f60c3f69-cd9b-4d17-84a8-d1c8c5c84a42",
+    "title": "Sunrise Ridge Lookout",
+    "description": "Sweeping perspective of the Cascade volcanic arc with sunrise alignment.",
+    "coordinates": { "latitude": 45.3265, "longitude": -121.7112 },
+    "capturedAt": "2025-02-12T13:54:00Z",
+    "addedAt": "2025-02-14T18:00:00Z",
+    "verifiedAt": "2025-03-02T17:30:00Z",
+    "elevationM": 2685,
+    "status": "published",
+    "author": { "id": "b4a2b902-37ce-4290-a990-5eb0fdcfdc08", "name": "Alex Rivers" },
+    "media": [
+      {
+        "id": "87cd3c75-f2dd-4e2e-9cb9-887371d05130",
+        "type": "photo",
+        "path": "media/sunrise-ridge/photo-hero.jpg",
+        "width": 4000,
+        "height": 2600
+      }
+    ],
+    "tags": [
+      { "id": "6058c392-9635-4efd-9fba-62d6de1ca2fc", "slug": "sunrise", "label": "Sunrise" },
+      { "id": "f5d4d1f9-1c51-4f02-8cdb-fef18284d888", "slug": "mountain", "label": "Mountain" }
+    ],
+    "comments": [
+      {
+        "id": "38a998a4-3442-47b1-9c1a-476cccf45d90",
+        "body": "Snowpack was compact and the eastern approach was clear.",
+        "visitedAt": "2025-02-28T14:05:00Z",
+        "createdAt": "2025-02-28T16:05:00Z",
+        "status": "published",
+        "author": { "id": "95f5a6b1-4180-4e25-9bb5-fd1983a5e0b6", "name": "Priya Chen" }
+      }
+    ]
+  },
+  "nearbySubtext": "Sample dataset",
+  "nearby": [
+    {
+      "id": "nearby-sample-1",
+      "title": "Glacier Notch Overlook",
+      "author": { "name": "Priya Chen" },
+      "distanceM": 480,
+      "addedAt": "2024-09-10T18:00:00Z"
+    },
+    {
+      "id": "nearby-sample-2",
+      "title": "Timberline Shelf",
+      "author": { "name": "Jordan Malik" },
+      "distanceM": 910,
+      "addedAt": "2024-12-01T18:00:00Z"
+    }
+  ],
+  "shared": [
+    {
+      "id": "shared-sample-1",
+      "title": "Icefall Sunrise Spur",
+      "author": { "name": "Alex Rivers" },
+      "tags": [
+        { "slug": "sunrise", "label": "Sunrise" },
+        { "slug": "winter", "label": "Winter" }
+      ]
+    }
+  ],
+  "latest": [
+    {
+      "id": "latest-sample-1",
+      "title": "Fir Crest Watchtower",
+      "author": { "name": "Jordan Malik" },
+      "addedAt": "2025-02-06T18:00:00Z"
+    },
+    {
+      "id": "latest-sample-2",
+      "title": "Cinder Cone Overlook",
+      "author": { "name": "Alex Rivers" },
+      "addedAt": "2024-12-24T18:00:00Z"
+    }
+  ]
+}

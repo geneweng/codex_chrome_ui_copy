@@ -47,7 +47,7 @@ Example using `npx`:
 npx serve .
 ```
 
-Open `http://localhost:3000` (or the port printed by the dev server). The page loads `app.js`, which now uses the inline config script in `index.html` to target `http://localhost:4000`. 
+Open `http://localhost:3000` (or the port printed by the dev server). The page loads `app.js`, which targets `http://localhost:4000` by default. If the API is unavailable, the UI falls back to `sample-data.json` so the sidebar still displays demo viewpoints.
 If you host the API elsewhere, update the snippet near the bottom of `index.html` or set `window.API_BASE_URL` in the console to point to the new origin.
 
 ## Environment variables
@@ -70,3 +70,15 @@ Media rows in `media_assets.storage_path` point to locations such as `media/sunr
 - Add authentication/authorization (JWT) and rate limiting.
 - Swap local media for S3 or GCS and introduce background workers for thumbnail generation.
 - Layer in search/caching (Elasticsearch, Redis) as usage grows.
+
+## Testing
+
+Run the integration and UI smoke tests from the `server/` directory (PostgreSQL + PostGIS should be seeded first):
+
+```bash
+cd server
+npm install
+npm test
+```
+
+The suite asserts that the database has published viewpoints, the API responds with data, and the sidebar filters render lists in a jsdom environment.

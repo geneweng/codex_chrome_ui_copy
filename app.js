@@ -8,7 +8,9 @@ const state = {
   shared: null,
   sharedSummary: '',
   latest: null,
-  activeFilter: 'nearby'
+  activeFilter: 'nearby',
+  useSample: false,
+  handlersAttached: false
 };
 
 const dateTimeFormatter = new Intl.DateTimeFormat(undefined, {
@@ -231,7 +233,7 @@ const populateNearby = async ({ force = false, updateFilter = true } = {}) => {
   const detail = state.detail;
   if (!detail) return;
 
-  if (!state.nearby || force) {
+  if (!state.useSample && (!state.nearby || force)) {
     const params = new URLSearchParams({
       near_lat: detail.coordinates.latitude,
       near_lng: detail.coordinates.longitude,
@@ -240,6 +242,10 @@ const populateNearby = async ({ force = false, updateFilter = true } = {}) => {
     });
     const nearbyResponse = await fetchJson(`/api/viewpoints?${params.toString()}`);
     state.nearby = nearbyResponse.data.filter((item) => item.id !== detail.id);
+  }
+
+  if (state.useSample && !state.nearby) {
+    state.nearby = [];
   }
 
   if (updateFilter) {
@@ -256,7 +262,7 @@ const populateSharedTags = async ({ force = false, updatePanel = true, updateFil
   const detail = state.detail;
   const sharedList = document.getElementById('shared-tags-list');
 
-  if (!detail?.tags?.length) {
+  if (!detail?.tags?.length && !state.useSample) {
     if (updatePanel && sharedList) {
       renderListItems([], sharedList);
       const subtext = sharedList.previousElementSibling?.querySelector('.subtext');
@@ -272,11 +278,18 @@ const populateSharedTags = async ({ force = false, updatePanel = true, updateFil
     return;
   }
 
-  if (!state.shared || force) {
+  if (!state.useSample && (!state.shared || force)) {
     const primaryTag = detail.tags[0].slug;
     const related = await fetchJson(`/api/viewpoints?tag=${primaryTag}&limit=5`);
     state.shared = related.data.filter((item) => item.id !== detail.id);
     state.sharedSummary = detail.tags.map((tag) => `#${tag.slug}`).join(' · ');
+  }
+
+  if (state.useSample) {
+    state.shared = state.shared ?? [];
+    if (!state.sharedSummary && detail?.tags) {
+      state.sharedSummary = detail.tags.map((tag) => `#${tag.slug}`).join(' · ');
+    }
   }
 
   if (updatePanel && sharedList) {
@@ -300,9 +313,13 @@ const populateSharedTags = async ({ force = false, updatePanel = true, updateFil
 
 const populateLatest = async ({ force = false, updateFilter = true } = {}) => {
   const detail = state.detail;
-  if (!state.latest || force) {
+  if (!state.useSample && (!state.latest || force)) {
     const latestResponse = await fetchJson('/api/viewpoints?limit=5');
     state.latest = latestResponse.data.filter((item) => !detail || item.id !== detail.id);
+  }
+
+  if (state.useSample && !state.latest) {
+    state.latest = [];
   }
 
   if (updateFilter) {
@@ -316,6 +333,10 @@ const populateLatest = async ({ force = false, updateFilter = true } = {}) => {
 };
 
 const attachFilterHandlers = () => {
+  if (state.handlersAttached) {
+    return;
+  }
+  state.handlersAttached = true;
   document.querySelectorAll('[data-filter]').forEach((button) => {
     button.addEventListener('click', async () => {
       const filter = button.dataset.filter;
@@ -348,6 +369,7 @@ const loadData = async () => {
 
   try {
     const detail = await fetchJson(`/api/viewpoints/${DEFAULT_VIEWPOINT_ID}`);
+    state.useSample = false;
     state.detail = detail;
     applyViewpointDetail(detail);
 
@@ -357,7 +379,39 @@ const loadData = async () => {
 
     attachFilterHandlers();
   } catch (error) {
-    console.error('Failed to load data', error);
+    console.error('Failed to load live data, falling back to sample dataset', error);
+    await loadSampleData();
+  }
+};
+
+const loadSampleData = async () => {
+  try {
+    const response = await fetch('sample-data.json');
+    if (!response.ok) {
+      throw new Error('Sample data unavailable');
+    }
+    const sample = await response.json();
+    state.useSample = true;
+    state.detail = sample.detail;
+    state.nearby = sample.nearby ?? [];
+    state.latest = sample.latest ?? [];
+    state.shared = sample.shared ?? [];
+    state.sharedSummary = sample.sharedSummary ?? (state.detail?.tags ? state.detail.tags.map((tag) => `#${tag.slug}`).join(' · ') : '');
+
+    applyViewpointDetail(state.detail);
+    setFilterHeading('Nearby view points', sample.nearbySubtext || 'Sample dataset');
+    setActiveFilter('nearby');
+    renderListItems(state.nearby, document.getElementById('filter-list'), {
+      showDistance: true,
+      extraMeta: (item) => (item.addedAt ? `Added ${dateFormatter.format(new Date(item.addedAt))}` : '')
+    });
+
+    await populateSharedTags({ updatePanel: true, updateFilter: false });
+    await populateLatest({ updateFilter: false });
+
+    attachFilterHandlers();
+  } catch (sampleError) {
+    console.error('Failed to load sample data', sampleError);
   }
 };
 
