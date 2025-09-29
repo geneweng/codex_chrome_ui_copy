@@ -84,6 +84,42 @@ VALUES
         NULL,
         1585.00,
         'published'
+    ),
+    (
+        '2b6d2c61-51ce-4b2b-8074-1c6b65f0103b',
+        'Icefall Sunrise Spur',
+        'Craggy spur overlooking the glacier bowl with direct sunrise alignment.',
+        '95f5a6b1-4180-4e25-9bb5-fd1983a5e0b6',
+        ST_SetSRID(ST_MakePoint(-121.7200, 45.3330), 4326),
+        '2025-01-05T14:10:00Z',
+        '2025-01-08T18:00:00Z',
+        '2025-02-01T18:00:00Z',
+        2550.00,
+        'published'
+    ),
+    (
+        '8e0f0f4d-eab7-4c50-8be0-65c8cfa3b8b4',
+        'Cinder Cone Overlook',
+        'Low-lying cinder cone with panoramic views of the southern valley at dawn.',
+        'b4a2b902-37ce-4290-a990-5eb0fdcfdc08',
+        ST_SetSRID(ST_MakePoint(-121.7020, 45.3185), 4326),
+        '2024-12-22T15:50:00Z',
+        '2024-12-24T18:00:00Z',
+        NULL,
+        2055.00,
+        'published'
+    ),
+    (
+        'b7d12c8f-6ef2-4df4-98a1-dbd8740efd2e',
+        'Fir Crest Watchtower',
+        'Historic lookout nestled in fir crest with framed sunrise angles and sheltered deck.',
+        'a1df7e1c-3c92-4cfa-9a9f-4c11f0758442',
+        ST_SetSRID(ST_MakePoint(-121.7505, 45.3099), 4326),
+        '2025-02-01T14:40:00Z',
+        '2025-02-06T18:00:00Z',
+        '2025-02-20T18:00:00Z',
+        2108.00,
+        'published'
     );
 
 -- Media assets
@@ -94,7 +130,10 @@ VALUES
     ('1cf9de5d-3a9c-4a35-bde3-0f354f0433a0', '8a67059e-a931-4a98-8a7e-575149d6c12d', 'photo', 'media/glacier-notch/panorama.jpg', 'image/jpeg', 5200, 2600, NULL, '2024-09-04T15:12:00Z', 0),
     ('b6f19bc5-1e6c-4996-9e9d-f36d8a4f6306', 'd2a1fa0b-4a4c-4793-beda-5efb0b4f5c5f', 'photo', 'media/ridgeback-aurora/sky-band.jpg', 'image/jpeg', 4800, 3200, NULL, '2025-01-18T06:42:00Z', 0),
     ('7c9c1a4b-27e0-43b4-9f77-724e70e4024e', 'd2a1fa0b-4a4c-4793-beda-5efb0b4f5c5f', 'video', 'media/ridgeback-aurora/timelapse.mp4', 'video/mp4', 1920, 1080, 68.0, '2025-01-18T06:40:00Z', 1),
-    ('9e5649e7-e1d1-4955-8b68-76cdb6c22eef', 'c36f84f7-2c3f-4ed2-b050-119fde0b2858', 'photo', 'media/riverbend-mist/fog-sweep.jpg', 'image/jpeg', 4200, 2800, NULL, '2024-10-11T14:30:00Z', 0);
+    ('9e5649e7-e1d1-4955-8b68-76cdb6c22eef', 'c36f84f7-2c3f-4ed2-b050-119fde0b2858', 'photo', 'media/riverbend-mist/fog-sweep.jpg', 'image/jpeg', 4200, 2800, NULL, '2024-10-11T14:30:00Z', 0),
+    ('51a4faaa-7c70-4e72-9a6d-07a8b3d8c062', '2b6d2c61-51ce-4b2b-8074-1c6b65f0103b', 'photo', 'media/icefall-sunrise/pink-glow.jpg', 'image/jpeg', 4600, 3000, NULL, '2025-01-05T14:10:00Z', 0),
+    ('f7a5d21d-1c6d-4b3c-868b-5f4f5ac64020', '8e0f0f4d-eab7-4c50-8be0-65c8cfa3b8b4', 'photo', 'media/cinder-cone/dawn-ridge.jpg', 'image/jpeg', 3800, 2500, NULL, '2024-12-22T15:50:00Z', 0),
+    ('c34d57e4-8d02-45a1-9198-61c77f7dc12b', 'b7d12c8f-6ef2-4df4-98a1-dbd8740efd2e', 'photo', 'media/fir-crest/watchtower-sunrise.jpg', 'image/jpeg', 4000, 2600, NULL, '2025-02-01T14:40:00Z', 0);
 
 -- Viewpoint tags
 INSERT INTO viewpoint_tags (viewpoint_id, tag_id)
@@ -111,7 +150,16 @@ VALUES
     ('d2a1fa0b-4a4c-4793-beda-5efb0b4f5c5f', '75fb67d6-6953-4f4e-bc9f-6f9946466bc7'),
     ('d2a1fa0b-4a4c-4793-beda-5efb0b4f5c5f', 'bf33dc9b-698d-4ad5-b62a-bbe0ef0a6d2a'),
     ('c36f84f7-2c3f-4ed2-b050-119fde0b2858', 'f6f34cdf-e2b9-45f6-9a40-1b0ed2fe2f49'),
-    ('c36f84f7-2c3f-4ed2-b050-119fde0b2858', '6058c392-9635-4efd-9fba-62d6de1ca2fc');
+    ('c36f84f7-2c3f-4ed2-b050-119fde0b2858', '6058c392-9635-4efd-9fba-62d6de1ca2fc'),
+    ('2b6d2c61-51ce-4b2b-8074-1c6b65f0103b', '6058c392-9635-4efd-9fba-62d6de1ca2fc'),
+    ('2b6d2c61-51ce-4b2b-8074-1c6b65f0103b', '75fb67d6-6953-4f4e-bc9f-6f9946466bc7'),
+    ('2b6d2c61-51ce-4b2b-8074-1c6b65f0103b', 'bf33dc9b-698d-4ad5-b62a-bbe0ef0a6d2a'),
+    ('8e0f0f4d-eab7-4c50-8be0-65c8cfa3b8b4', '6058c392-9635-4efd-9fba-62d6de1ca2fc'),
+    ('8e0f0f4d-eab7-4c50-8be0-65c8cfa3b8b4', 'f5d4d1f9-1c51-4f02-8cdb-fef18284d888'),
+    ('8e0f0f4d-eab7-4c50-8be0-65c8cfa3b8b4', 'f6f34cdf-e2b9-45f6-9a40-1b0ed2fe2f49'),
+    ('b7d12c8f-6ef2-4df4-98a1-dbd8740efd2e', 'f5d4d1f9-1c51-4f02-8cdb-fef18284d888'),
+    ('b7d12c8f-6ef2-4df4-98a1-dbd8740efd2e', '75fb67d6-6953-4f4e-bc9f-6f9946466bc7'),
+    ('b7d12c8f-6ef2-4df4-98a1-dbd8740efd2e', 'f6f34cdf-e2b9-45f6-9a40-1b0ed2fe2f49');
 
 -- Comments
 INSERT INTO comments (id, viewpoint_id, author_id, body, visited_at, created_at, status)
@@ -159,6 +207,33 @@ VALUES
         'Morning fog can be unpredictable—check river temperature first. Bring a neutral density filter.',
         '2024-10-20T14:40:00Z',
         '2024-10-20T16:40:00Z',
+        'published'
+    ),
+    (
+        'e8a0105c-5b70-44f9-bb31-0f959bb8f9da',
+        '2b6d2c61-51ce-4b2b-8074-1c6b65f0103b',
+        'a1df7e1c-3c92-4cfa-9a9f-4c11f0758442',
+        'Wind cut sharply across the spur—microspikes and a wind shell recommended before sunrise.',
+        '2025-01-30T13:55:00Z',
+        '2025-01-30T16:00:00Z',
+        'published'
+    ),
+    (
+        '5ff7f353-a8f3-4d75-86cb-a86c807facf8',
+        '8e0f0f4d-eab7-4c50-8be0-65c8cfa3b8b4',
+        '95f5a6b1-4180-4e25-9bb5-fd1983a5e0b6',
+        'Easy approach even in winter; light dusting of snow made for excellent contrast.',
+        '2025-01-05T17:10:00Z',
+        '2025-01-05T19:10:00Z',
+        'published'
+    ),
+    (
+        '6c1ac10b-0d75-4c1d-8705-345c3aaed640',
+        'b7d12c8f-6ef2-4df4-98a1-dbd8740efd2e',
+        'b4a2b902-37ce-4290-a990-5eb0fdcfdc08',
+        'Watchtower deck fits three tripods; trees block wind gusts nicely.',
+        '2025-02-15T14:20:00Z',
+        '2025-02-15T16:30:00Z',
         'published'
     );
 
