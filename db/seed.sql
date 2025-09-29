@@ -125,15 +125,15 @@ VALUES
 -- Media assets
 INSERT INTO media_assets (id, viewpoint_id, media_type, storage_path, mime_type, width, height, duration_sec, captured_at, sort_order)
 VALUES
-    ('87cd3c75-f2dd-4e2e-9cb9-887371d05130', 'f60c3f69-cd9b-4d17-84a8-d1c8c5c84a42', 'photo', 'media/sunrise-ridge/photo-hero.jpg', 'image/jpeg', 4000, 2600, NULL, '2025-02-12T13:54:00Z', 0),
+    ('87cd3c75-f2dd-4e2e-9cb9-887371d05130', 'f60c3f69-cd9b-4d17-84a8-d1c8c5c84a42', 'photo', 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80', 'image/jpeg', 4000, 2600, NULL, '2025-02-12T13:54:00Z', 0),
     ('f113ed9d-6aa3-4bc2-8c3f-3a77f4dc4b18', 'f60c3f69-cd9b-4d17-84a8-d1c8c5c84a42', 'video', 'media/sunrise-ridge/trail-approach.mp4', 'video/mp4', 1920, 1080, 42.5, '2025-02-12T13:45:00Z', 1),
-    ('1cf9de5d-3a9c-4a35-bde3-0f354f0433a0', '8a67059e-a931-4a98-8a7e-575149d6c12d', 'photo', 'media/glacier-notch/panorama.jpg', 'image/jpeg', 5200, 2600, NULL, '2024-09-04T15:12:00Z', 0),
-    ('b6f19bc5-1e6c-4996-9e9d-f36d8a4f6306', 'd2a1fa0b-4a4c-4793-beda-5efb0b4f5c5f', 'photo', 'media/ridgeback-aurora/sky-band.jpg', 'image/jpeg', 4800, 3200, NULL, '2025-01-18T06:42:00Z', 0),
+    ('1cf9de5d-3a9c-4a35-bde3-0f354f0433a0', '8a67059e-a931-4a98-8a7e-575149d6c12d', 'photo', 'https://images.unsplash.com/photo-1477414348463-c0eb7f1359b6?auto=format&fit=crop&w=1600&q=80', 'image/jpeg', 5200, 2600, NULL, '2024-09-04T15:12:00Z', 0),
+    ('b6f19bc5-1e6c-4996-9e9d-f36d8a4f6306', 'd2a1fa0b-4a4c-4793-beda-5efb0b4f5c5f', 'photo', 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1600&q=80', 'image/jpeg', 4800, 3200, NULL, '2025-01-18T06:42:00Z', 0),
     ('7c9c1a4b-27e0-43b4-9f77-724e70e4024e', 'd2a1fa0b-4a4c-4793-beda-5efb0b4f5c5f', 'video', 'media/ridgeback-aurora/timelapse.mp4', 'video/mp4', 1920, 1080, 68.0, '2025-01-18T06:40:00Z', 1),
-    ('9e5649e7-e1d1-4955-8b68-76cdb6c22eef', 'c36f84f7-2c3f-4ed2-b050-119fde0b2858', 'photo', 'media/riverbend-mist/fog-sweep.jpg', 'image/jpeg', 4200, 2800, NULL, '2024-10-11T14:30:00Z', 0),
-    ('51a4faaa-7c70-4e72-9a6d-07a8b3d8c062', '2b6d2c61-51ce-4b2b-8074-1c6b65f0103b', 'photo', 'media/icefall-sunrise/pink-glow.jpg', 'image/jpeg', 4600, 3000, NULL, '2025-01-05T14:10:00Z', 0),
-    ('f7a5d21d-1c6d-4b3c-868b-5f4f5ac64020', '8e0f0f4d-eab7-4c50-8be0-65c8cfa3b8b4', 'photo', 'media/cinder-cone/dawn-ridge.jpg', 'image/jpeg', 3800, 2500, NULL, '2024-12-22T15:50:00Z', 0),
-    ('c34d57e4-8d02-45a1-9198-61c77f7dc12b', 'b7d12c8f-6ef2-4df4-98a1-dbd8740efd2e', 'photo', 'media/fir-crest/watchtower-sunrise.jpg', 'image/jpeg', 4000, 2600, NULL, '2025-02-01T14:40:00Z', 0);
+    ('9e5649e7-e1d1-4955-8b68-76cdb6c22eef', 'c36f84f7-2c3f-4ed2-b050-119fde0b2858', 'photo', 'https://images.unsplash.com/photo-1441829266145-bf48adbb2282?auto=format&fit=crop&w=1600&q=80', 'image/jpeg', 4200, 2800, NULL, '2024-10-11T14:30:00Z', 0),
+    ('51a4faaa-7c70-4e72-9a6d-07a8b3d8c062', '2b6d2c61-51ce-4b2b-8074-1c6b65f0103b', 'photo', 'https://images.unsplash.com/photo-1500043206221-4dc0b7d27960?auto=format&fit=crop&w=1600&q=80', 'image/jpeg', 4600, 3000, NULL, '2025-01-05T14:10:00Z', 0),
+    ('f7a5d21d-1c6d-4b3c-868b-5f4f5ac64020', '8e0f0f4d-eab7-4c50-8be0-65c8cfa3b8b4', 'photo', 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1600&q=80', 'image/jpeg', 3800, 2500, NULL, '2024-12-22T15:50:00Z', 0),
+    ('c34d57e4-8d02-45a1-9198-61c77f7dc12b', 'b7d12c8f-6ef2-4df4-98a1-dbd8740efd2e', 'photo', 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80', 'image/jpeg', 4000, 2600, NULL, '2025-02-01T14:40:00Z', 0);
 
 -- Viewpoint tags
 INSERT INTO viewpoint_tags (viewpoint_id, tag_id)

@@ -62,7 +62,7 @@ If you host the API elsewhere, update the snippet near the bottom of `index.html
 
 ## Local media storage
 
-Media rows in `media_assets.storage_path` point to locations such as `media/sunrise-ridge/photo-hero.jpg`. When storing files locally, ensure that path is resolvable by your static file server (e.g., symlink `media/` into your web root or configure Express to serve it). The API returns the relative path; the front-end concatenates it with `MEDIA_BASE_URL`.
+Media rows in `media_assets.storage_path` now default to hosted Unsplash URLs so the mock renders out of the box. When you start managing your own assets, replace those URLs with your CDN/local paths and update `MEDIA_BASE_URL` if needed.
 
 ## Next steps
 
