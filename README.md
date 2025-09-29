@@ -47,7 +47,8 @@ Example using `npx`:
 npx serve .
 ```
 
-Open `http://localhost:3000` (or the port printed by the dev server). The page loads `app.js`, which fetches data from `http://localhost:4000` via relative paths. If you host the API elsewhere, set `window.API_BASE_URL` in the console or embed a small script tag before `app.js` to override the default.
+Open `http://localhost:3000` (or the port printed by the dev server). The page loads `app.js`, which now uses the inline config script in `index.html` to target `http://localhost:4000`. 
+If you host the API elsewhere, update the snippet near the bottom of `index.html` or set `window.API_BASE_URL` in the console to point to the new origin.
 
 ## Environment variables
 
