@@ -72,12 +72,20 @@ if (!runUiTest) {
     window.API_BASE_URL = 'http://mock.api';
     window.MEDIA_BASE_URL = '';
 
-    global.fetch = async (url) => {
-      const normalized = typeof url === 'string' ? url : url.toString();
+    global.fetch = async (input) => {
+      let normalized;
+      if (typeof input === 'string') {
+        normalized = input;
+      } else if (input && typeof input === 'object') {
+        normalized = input.url || (input.href ? input.href : String(input));
+      } else {
+        normalized = String(input);
+      }
+
       if (normalized.startsWith(window.API_BASE_URL)) {
         return { ok: false, status: 500, json: async () => ({}) };
       }
-      if (normalized.endsWith('sample-data.json')) {
+      if (normalized.includes('sample-data.json')) {
         return {
           ok: true,
           json: async () => ({
@@ -95,7 +103,11 @@ if (!runUiTest) {
     const appModuleUrl = pathToFileURL(path.join(projectRoot, 'app.js')).href;
     await import(appModuleUrl);
 
-    dom.window.document.dispatchEvent(new dom.window.Event('DOMContentLoaded'));
+    if (typeof dom.window.__loadSampleData === 'function') {
+      await dom.window.__loadSampleData();
+    } else {
+      dom.window.document.dispatchEvent(new dom.window.Event('DOMContentLoaded'));
+    }
 
     const list = dom.window.document.getElementById('filter-list');
     await waitFor(() => list.children.length > 0);

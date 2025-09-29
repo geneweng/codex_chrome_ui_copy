@@ -424,4 +424,10 @@ const fetchJson = async (path) => {
   return response.json();
 };
 
+
+if (typeof window !== 'undefined') {
+  window.__VIEWPOINT_STATE__ = state;
+  window.__loadSampleData = loadSampleData;
+}
+
 window.addEventListener('DOMContentLoaded', loadData);
