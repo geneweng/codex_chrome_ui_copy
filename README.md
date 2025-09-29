@@ -81,4 +81,4 @@ npm install
 npm test
 ```
 
-The suite asserts that the database has published viewpoints, the API responds with data, and the sidebar filters render lists in a jsdom environment.
+All tests are skipped by default in CI-like environments. Set `RUN_API_TESTS=1` to exercise the Postgres/Express integration suite, and `RUN_UI_TESTS=1` for the jsdom sidebar test.
