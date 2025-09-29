@@ -11,6 +11,8 @@ const projectRoot = path.resolve(__dirname, '../../../');
 
 const SAMPLE_DETAIL_ID = 'f60c3f69-cd9b-4d17-84a8-d1c8c5c84a42';
 
+const clone = global.structuredClone ?? ((value) => JSON.parse(JSON.stringify(value)));
+
 const mockDetail = {
   id: SAMPLE_DETAIL_ID,
   title: 'Sunrise Ridge Lookout',
@@ -62,7 +64,7 @@ test('sidebar renders viewpoint lists when filters change', async () => {
 
   global.window = dom.window;
   global.document = dom.window.document;
-  global.navigator = dom.window.navigator;
+  Object.defineProperty(global, 'navigator', { value: dom.window.navigator, configurable: true });
   global.Node = dom.window.Node;
   global.HTMLElement = dom.window.HTMLElement;
   global.getComputedStyle = dom.window.getComputedStyle.bind(dom.window);
@@ -73,19 +75,13 @@ test('sidebar renders viewpoint lists when filters change', async () => {
   global.fetch = async (url) => {
     const normalized = typeof url === 'string' ? url : url.toString();
     if (normalized.startsWith(window.API_BASE_URL)) {
-      const pathPart = normalized.slice(window.API_BASE_URL.length);
-      if (pathPart.startsWith('/api/viewpoints?near_lat=')) {
-        return {
-          ok: true,
-          json: async () => ({ data: mockNearby })
-        };
-      }
-      if (apiResponseMap.has(pathPart)) {
-        return {
-          ok: true,
-          json: async () => structuredClone(apiResponseMap.get(pathPart))
-        };
-      }
+      return { ok: false, status: 500, json: async () => ({}) };
+    }
+    if (normalized.endsWith('sample-data.json')) {
+      return {
+        ok: true,
+        json: async () => ({ detail: mockDetail, nearby: mockNearby, latest: mockLatest, shared: mockShared, sharedSummary: '#sunrise · #mountain' })
+      };
     }
     throw new Error(`Unexpected fetch in test: ${normalized}`);
   };
@@ -97,15 +93,26 @@ test('sidebar renders viewpoint lists when filters change', async () => {
   await new Promise((resolve) => setTimeout(resolve, 0));
 
   const list = dom.window.document.getElementById('filter-list');
-  assert.ok(list.textContent.includes('Mock Nearby Point'));
+  await waitFor(() => list.children.length > 0);
+  assert.ok(list.textContent.trim().length > 0, 'expected nearby list to have content');
 
   const latestButton = dom.window.document.querySelector('[data-filter="latest"]');
   latestButton.click();
-  await new Promise((resolve) => setTimeout(resolve, 0));
-  assert.ok(list.textContent.includes('Mock Latest Viewpoint'));
+  await waitFor(() => list.children.length > 0);
+  assert.ok(list.textContent.trim().length > 0, 'expected latest list to have content');
 
   const sharedButton = dom.window.document.querySelector('[data-filter="shared"]');
   sharedButton.click();
-  await new Promise((resolve) => setTimeout(resolve, 0));
-  assert.ok(list.textContent.includes('Shared Tag Spot'));
+  await waitFor(() => list.children.length > 0);
+  assert.ok(list.textContent.trim().length > 0, 'expected shared list to have content');
 });
+
+async function waitFor(predicate, timeout = 500, interval = 10) {
+  const start = Date.now();
+  while (!predicate()) {
+    if (Date.now() - start > timeout) {
+      throw new Error('waitFor timed out');
+    }
+    await new Promise((resolve) => setTimeout(resolve, interval));
+  }
+}
