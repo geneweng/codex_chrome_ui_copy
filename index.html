@@ -148,18 +148,18 @@
       <section class="sidebar-card">
         <header class="sidebar-header">
           <h2>Filters</h2>
-          <button class="chip">Nearby</button>
-          <button class="chip">Shared tags</button>
-          <button class="chip">Latest</button>
+          <button class="chip active" data-filter="nearby">Nearby</button>
+          <button class="chip" data-filter="shared">Shared tags</button>
+          <button class="chip" data-filter="latest">Latest</button>
         </header>
       </section>
 
       <section class="sidebar-card">
         <header class="sidebar-header">
-          <h2>Nearby view points</h2>
-          <span class="subtext">Within 5 km radius</span>
+          <h2 id="filter-title">Nearby view points</h2>
+          <span class="subtext" id="filter-subtext">Within 5 km radius</span>
         </header>
-        <ul class="recommendations" id="nearby-list"></ul>
+        <ul class="recommendations" id="filter-list"></ul>
       </section>
 
       <section class="sidebar-card">

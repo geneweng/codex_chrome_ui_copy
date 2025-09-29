@@ -2,6 +2,15 @@ const API_BASE_URL = window.API_BASE_URL || '';
 const MEDIA_BASE_URL = window.MEDIA_BASE_URL || '';
 const DEFAULT_VIEWPOINT_ID = 'f60c3f69-cd9b-4d17-84a8-d1c8c5c84a42';
 
+const state = {
+  detail: null,
+  nearby: null,
+  shared: null,
+  sharedSummary: '',
+  latest: null,
+  activeFilter: 'nearby'
+};
+
 const dateTimeFormatter = new Intl.DateTimeFormat(undefined, {
   year: 'numeric',
   month: 'short',
@@ -41,7 +50,9 @@ const applyHeroMedia = (hero) => {
       mediaTypeEl.textContent = hero.type?.toUpperCase?.() || 'MEDIA';
     }
     if (mediaTimestampEl) {
-      const label = hero.capturedAt ? `${dateTimeFormatter.format(new Date(hero.capturedAt))}` : 'Captured date unknown';
+      const label = hero.capturedAt
+        ? `${dateTimeFormatter.format(new Date(hero.capturedAt))}`
+        : 'Captured date unknown';
       mediaTimestampEl.textContent = label;
     }
     if (mediaContainer && hero.path) {
@@ -128,7 +139,7 @@ const metersToHuman = (value) => {
   return `${Math.round(value)} m away`;
 };
 
-const renderListItems = (items, container, { showDistance = false } = {}) => {
+const renderListItems = (items, container, { showDistance = false, extraMeta } = {}) => {
   if (!container) return;
   container.innerHTML = '';
 
@@ -141,13 +152,16 @@ const renderListItems = (items, container, { showDistance = false } = {}) => {
   }
 
   items.forEach((item) => {
+    const distanceText = showDistance && item.distanceM ? metersToHuman(item.distanceM) : '';
+    const extraText = extraMeta ? extraMeta(item) : '';
     const li = document.createElement('li');
     li.innerHTML = `
       <div class="thumb"></div>
       <div class="recommendation-copy">
         <a href="#" class="viewpoint-name">${item.title}</a>
         <span class="meta">${item.author?.name || ''}</span>
-        <span class="meta">${showDistance && item.distanceM ? metersToHuman(item.distanceM) : ''}</span>
+        ${distanceText ? `<span class="meta">${distanceText}</span>` : ''}
+        ${extraText ? `<span class="meta">${extraText}</span>` : ''}
       </div>
       <button class="icon-button more" aria-label="More actions">...</button>
     `;
@@ -195,6 +209,135 @@ const applyViewpointDetail = (viewpoint) => {
   renderComments(viewpoint.comments);
 };
 
+const setFilterHeading = (title, subtext = '') => {
+  const titleEl = document.getElementById('filter-title');
+  if (titleEl) {
+    titleEl.textContent = title;
+  }
+  const subtextEl = document.getElementById('filter-subtext');
+  if (subtextEl) {
+    subtextEl.textContent = subtext;
+  }
+};
+
+const setActiveFilter = (filter) => {
+  state.activeFilter = filter;
+  document
+    .querySelectorAll('[data-filter]')
+    .forEach((chip) => chip.classList.toggle('active', chip.dataset.filter === filter));
+};
+
+const populateNearby = async ({ force = false, updateFilter = true } = {}) => {
+  const detail = state.detail;
+  if (!detail) return;
+
+  if (!state.nearby || force) {
+    const params = new URLSearchParams({
+      near_lat: detail.coordinates.latitude,
+      near_lng: detail.coordinates.longitude,
+      radius: '6000',
+      limit: '5'
+    });
+    const nearbyResponse = await fetchJson(`/api/viewpoints?${params.toString()}`);
+    state.nearby = nearbyResponse.data.filter((item) => item.id !== detail.id);
+  }
+
+  if (updateFilter) {
+    setFilterHeading('Nearby view points', 'Within 6 km radius');
+    setActiveFilter('nearby');
+    renderListItems(state.nearby, document.getElementById('filter-list'), {
+      showDistance: true,
+      extraMeta: (item) => (item.addedAt ? `Added ${dateFormatter.format(new Date(item.addedAt))}` : '')
+    });
+  }
+};
+
+const populateSharedTags = async ({ force = false, updatePanel = true, updateFilter = false } = {}) => {
+  const detail = state.detail;
+  const sharedList = document.getElementById('shared-tags-list');
+
+  if (!detail?.tags?.length) {
+    if (updatePanel && sharedList) {
+      renderListItems([], sharedList);
+      const subtext = sharedList.previousElementSibling?.querySelector('.subtext');
+      if (subtext) {
+        subtext.textContent = 'No shared tags yet';
+      }
+    }
+    if (updateFilter) {
+      setFilterHeading('Shared tags', 'No tags available');
+      setActiveFilter('shared');
+      renderListItems([], document.getElementById('filter-list'));
+    }
+    return;
+  }
+
+  if (!state.shared || force) {
+    const primaryTag = detail.tags[0].slug;
+    const related = await fetchJson(`/api/viewpoints?tag=${primaryTag}&limit=5`);
+    state.shared = related.data.filter((item) => item.id !== detail.id);
+    state.sharedSummary = detail.tags.map((tag) => `#${tag.slug}`).join(' · ');
+  }
+
+  if (updatePanel && sharedList) {
+    renderListItems(state.shared, sharedList, {
+      extraMeta: (item) => item.tags?.map((tag) => `#${tag.slug}`).slice(0, 3).join(' ')
+    });
+    const subtext = sharedList.previousElementSibling?.querySelector('.subtext');
+    if (subtext) {
+      subtext.textContent = state.sharedSummary;
+    }
+  }
+
+  if (updateFilter) {
+    setFilterHeading('Shared tag matches', state.sharedSummary || 'Related tags');
+    setActiveFilter('shared');
+    renderListItems(state.shared, document.getElementById('filter-list'), {
+      extraMeta: (item) => item.tags?.map((tag) => `#${tag.slug}`).slice(0, 3).join(' ')
+    });
+  }
+};
+
+const populateLatest = async ({ force = false, updateFilter = true } = {}) => {
+  const detail = state.detail;
+  if (!state.latest || force) {
+    const latestResponse = await fetchJson('/api/viewpoints?limit=5');
+    state.latest = latestResponse.data.filter((item) => !detail || item.id !== detail.id);
+  }
+
+  if (updateFilter) {
+    setFilterHeading('Latest view points', 'Most recent submissions');
+    setActiveFilter('latest');
+    renderListItems(state.latest, document.getElementById('filter-list'), {
+      extraMeta: (item) =>
+        item.addedAt ? `Added ${dateFormatter.format(new Date(item.addedAt))}` : ''
+    });
+  }
+};
+
+const attachFilterHandlers = () => {
+  document.querySelectorAll('[data-filter]').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const filter = button.dataset.filter;
+      if (filter === state.activeFilter) {
+        return;
+      }
+
+      try {
+        if (filter === 'nearby') {
+          await populateNearby({ updateFilter: true });
+        } else if (filter === 'shared') {
+          await populateSharedTags({ updatePanel: false, updateFilter: true });
+        } else if (filter === 'latest') {
+          await populateLatest({ updateFilter: true });
+        }
+      } catch (error) {
+        console.error('Failed to update filter list', error);
+      }
+    });
+  });
+};
+
 const loadData = async () => {
   const addCommentButton = document.getElementById('add-comment');
   if (addCommentButton) {
@@ -205,28 +348,14 @@ const loadData = async () => {
 
   try {
     const detail = await fetchJson(`/api/viewpoints/${DEFAULT_VIEWPOINT_ID}`);
+    state.detail = detail;
     applyViewpointDetail(detail);
 
-    const nearbyParams = new URLSearchParams({
-      near_lat: detail.coordinates.latitude,
-      near_lng: detail.coordinates.longitude,
-      radius: '6000',
-      limit: '5'
-    });
-    const nearby = await fetchJson(`/api/viewpoints?${nearbyParams.toString()}`);
-    const nearbyFiltered = nearby.data.filter((item) => item.id !== detail.id);
-    renderListItems(nearbyFiltered, document.getElementById('nearby-list'), { showDistance: true });
+    await populateNearby({ updateFilter: true, force: true });
+    await populateSharedTags({ updatePanel: true, updateFilter: false, force: true });
+    await populateLatest({ updateFilter: false, force: true });
 
-    if (detail.tags?.length) {
-      const primaryTag = detail.tags[0].slug;
-      const related = await fetchJson(`/api/viewpoints?tag=${primaryTag}&limit=5`);
-      const sharedFiltered = related.data.filter((item) => item.id !== detail.id);
-      renderListItems(sharedFiltered, document.getElementById('shared-tags-list'));
-      const sharedSubtext = document.querySelector('#shared-tags-list')?.previousElementSibling?.querySelector('.subtext');
-      if (sharedSubtext) {
-        sharedSubtext.textContent = detail.tags.map((tag) => `#${tag.slug}`).join(' · ');
-      }
-    }
+    attachFilterHandlers();
   } catch (error) {
     console.error('Failed to load data', error);
   }
